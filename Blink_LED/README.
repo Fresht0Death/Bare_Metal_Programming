@@ -1,0 +1,4 @@
+Blinking an LED on a NUCLEO-64 STM32F446RE, following the UDEMY course "Embedded Systems Bare-Metal Programming Ground Up™ (STM32)
+
+No Libraries used, Professional CMSIS Standard, ARM Cortex, ADC,UART,TIMERS, DMA,SPI,I2C,RTC,GPIO etc."
+
