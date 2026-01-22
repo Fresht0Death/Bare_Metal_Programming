@@ -1,0 +1,1 @@
+Single ADC conversion example
