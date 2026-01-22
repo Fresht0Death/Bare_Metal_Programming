@@ -8,7 +8,7 @@ I am following a **Udemy bare-metal embedded C course** using an STM32 Nucleo bo
 
 ---
 
-## ⭐ Highlighted Project (Independent Work)
+## Highlighted Project (Independent Work)
 
 ### STM32 ADC Potentiometer Reader
 Located in: `potentiometerADC/`
