@@ -1,0 +1,1 @@
+In this lesson Israel shows us how to define an interrupt, read when the interrupt flag has been set by clicking the onboard button, and then executing a callback function which print a statement to our serial ourput and flashes the onbaord LED.
