@@ -1,0 +1,109 @@
+/*
+ * adc.c
+ *
+ *  Created on: Jan 17, 2026
+ *      Author: Freshmai
+ */
+
+#include "stm32f4xx.h"
+#include "adc.h"
+
+
+
+#define GPIOAEN			(1U<<0)
+#define ADC1EN			(1U<<8)
+#define ADC_CH1     	(1U<<0)
+#define ADC_SEQ_LEN_1	0x00
+#define CR2_ADON 		(1U<<0)
+#define CR2_SWSTART     (1U<<30)
+#define CR2_CONT		(1U<<1)
+
+#define CR1_EOCI    (1U<<5)
+
+
+
+void pa1_adc_init(void){
+
+	/*** Configure the ADC GPIOA pin ***/
+	/* Enable clock access to gpioA*/
+	RCC->AHB1ENR |= GPIOAEN;
+	/* Set the mode of PA1 to analog mode which is done in the mode register */
+	GPIOA->MODER |= (1U<<2);
+	GPIOA->MODER |= (1U<<3);
+
+	/*** Configure the ADC module/peripheral ***/
+	RCC->APB2ENR |= ADC1EN;
+
+	/* Conversion sequence starts */
+
+	ADC1->SQR3 = ADC_CH1;
+	/* Conversion sequence length */
+	ADC1->SQR1 = ADC_SEQ_LEN_1;
+
+
+	/* Enable ADC module */
+	ADC1->CR2 |= CR2_ADON;
+
+
+}
+
+void start_conversion(void){
+
+
+	/* start conversion */
+	ADC1->CR2 |= CR2_CONT;
+
+	/* see what register allow for conversion */
+	ADC1->CR2 |= CR2_SWSTART;
+
+}
+
+uint32_t adc_read(void){
+
+
+	/* wait for conversion to be complete*/
+	while(!(ADC1->SR & SR_EOC)){/*stays stuck while false*/}
+	/* read conversion */
+	return (ADC1->DR);
+
+
+}
+
+
+
+void pa1_adc_interupt_init(void){
+
+	/*** Configure the ADC GPIOA pin ***/
+	/* Enable clock access to gpioA*/
+	RCC->AHB1ENR |= GPIOAEN;
+	/* Set the mode of PA1 to analog mode which is done in the mode register */
+	GPIOA->MODER |= (1U<<2);
+	GPIOA->MODER |= (1U<<3);
+
+	/*** Configure the ADC module/peripheral ***/
+	RCC->APB2ENR |= ADC1EN;
+
+	/* Conversion sequence starts */
+
+	ADC1->SQR3 = ADC_CH1;
+	/* Conversion sequence length */
+	ADC1->SQR1 = ADC_SEQ_LEN_1;
+
+
+	/* Enable ADC module */
+	ADC1->CR2 |= CR2_ADON;
+
+
+	/* Enable ADC end-of-conversion interrupt */
+	ADC1->CR1 |= CR1_EOCI;
+
+	/* Enable ADC interrupt in NVIC */
+	NVIC_EnableIRQ(ADC_IRQn); // regular nvic function with adc irqn as arugement
+
+
+
+
+
+}
+
+
